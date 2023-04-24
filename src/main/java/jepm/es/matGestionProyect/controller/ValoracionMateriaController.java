@@ -1,5 +1,9 @@
 package jepm.es.matGestionProyect.controller;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -9,6 +13,7 @@ import javax.persistence.Query;
 
 import jepm.es.matGestionProyect.model.Estudiante;
 import jepm.es.matGestionProyect.model.Valoracionmateria;
+
 
 public class ValoracionMateriaController {
 	
@@ -51,5 +56,20 @@ public class ValoracionMateriaController {
 		em.getTransaction().commit();
 		em.close();
 	}
+	
+	
+	/**
+	 * 
+	 */
+	public static void realizeInsert (Valoracionmateria vm) {
+		EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("GestionProgramacionMateria");
+		EntityManager em = entityManagerFactory.createEntityManager();	
+		
+		em.getTransaction().begin();
+		em.persist(vm);
+		em.getTransaction().commit();
+		em.close();
+	}
+	
 
 }

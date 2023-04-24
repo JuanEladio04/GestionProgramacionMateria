@@ -26,6 +26,7 @@ import javax.swing.JButton;
 import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class MainWindow extends JFrame {
 
@@ -133,6 +134,7 @@ public class MainWindow extends JFrame {
 		gbc_panel_1.gridy = 1;
 		contentPane.add(panel_1, gbc_panel_1);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0};
 		gbl_panel_1.columnWeights = new double[]{1.0};
 //		gbl_panel_1.columnWidths = new int[]{0, 0};
 //		gbl_panel_1.rowHeights = new int[]{0, 0, 0, 0};
@@ -158,10 +160,16 @@ public class MainWindow extends JFrame {
 		validationPane.setBackground(new Color(255, 255, 128));
 		GridBagConstraints gbc_validationPane = new GridBagConstraints();
 		gbc_validationPane.insets = new Insets(0, 0, 5, 0);
-		gbc_validationPane.fill = GridBagConstraints.BOTH;
+		gbc_validationPane.fill = GridBagConstraints.VERTICAL;
 		gbc_validationPane.gridx = 0;
 		gbc_validationPane.gridy = 2;
 		panel_1.add(validationPane, gbc_validationPane);
+		GridBagLayout gbl_validationPane = new GridBagLayout();
+		gbl_validationPane.columnWidths = new int[]{0, 0};
+		gbl_validationPane.rowHeights = new int[]{0, 0, 0};
+		gbl_validationPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
+		gbl_validationPane.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		validationPane.setLayout(gbl_validationPane);
 		
 		JButton saveButton = new JButton("Guardar las notas de todos los alumnos");
 		updateTheStudentsValues(saveButton);
@@ -170,7 +178,7 @@ public class MainWindow extends JFrame {
 		gbc_saveButton.gridy = 3;
 		panel_1.add(saveButton, gbc_saveButton);
 		setValuesToCombos(jcb_matChooser, jcb_professorChooser);
-		setValuesToValidationPane(validationPane);
+		setValuesToValidationPane();
 	}
 
 	
@@ -185,7 +193,7 @@ public class MainWindow extends JFrame {
 				Materia m = (Materia) jcb_matChooser.getSelectedItem();
 				
 				for (AlumnValorationPane alumnValorationPane : valorations) {
-					alumnValorationPane.updateOrInsertValorations(p.getId(), m.getId());
+					alumnValorationPane.updateOrInsertValorations(p, m);
 				}
 			}
 		});
@@ -247,17 +255,21 @@ public class MainWindow extends JFrame {
 	 * Generate automatucally all the Student data.
 	 * @param panel
 	 */
-	public void setValuesToValidationPane(JPanel panel) {
+	public void setValuesToValidationPane() {
+		int cont = 0;
 		List<Estudiante> students = EstudianteController.findAll();
+
 		for (Estudiante estudiante : students) {
 			AlumnValorationPane alumnPanel = new AlumnValorationPane(estudiante) ;
 			valorations.add(alumnPanel);
 		}
 		
-		for (AlumnValorationPane v : valorations) {
-			BoxLayout boxLayout = new BoxLayout(panel, BoxLayout.Y_AXIS);
-			panel.setLayout(boxLayout);
-			panel.add(v);
+		GridBagConstraints gbc = new GridBagConstraints();
+		for (AlumnValorationPane valoration : valorations) {
+		    gbc.weightx = 1;
+		    gbc.gridy = cont;
+		    this.validationPane.add(valoration, gbc);
+		    cont++;
 		}
 	}
 

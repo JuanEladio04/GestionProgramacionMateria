@@ -5,6 +5,7 @@
 		<class>jepm.es.matGestionProyect.model.Valoracionmateria</class>
 		<class>jepm.es.matGestionProyect.model.Estudiante</class>
 		<class>jepm.es.matGestionProyect.model.Profesor</class>
+		<class>jepm.es.matGestionProyect.model.Sequence</class>
 		<properties> 
            <property name="javax.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
             <property name="javax.persistence.jdbc.url" value="jdbc:mysql://127.0.0.1:32769/centroeducativo2?serverTimezone=Europe/Madrid"/>

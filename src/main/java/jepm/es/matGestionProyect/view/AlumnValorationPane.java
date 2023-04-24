@@ -6,8 +6,12 @@ import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import javax.swing.JTextField;
 
+import jepm.es.matGestionProyect.controller.EstudianteController;
 import jepm.es.matGestionProyect.controller.ValoracionMateriaController;
 import jepm.es.matGestionProyect.model.Estudiante;
+import jepm.es.matGestionProyect.model.Materia;
+import jepm.es.matGestionProyect.model.Profesor;
+import jepm.es.matGestionProyect.model.Sequence;
 import jepm.es.matGestionProyect.model.Valoracionmateria;
 
 import java.awt.Insets;
@@ -72,16 +76,31 @@ public class AlumnValorationPane extends JPanel {
 	 * @param idProf
 	 * @param idMat
 	 */
-	public void updateOrInsertValorations(int idProf, int idMat) {
-		Valoracionmateria vm = ValoracionMateriaController.findCalification(idProf, idMat, this.student.getId());
+	public void updateOrInsertValorations(Profesor p, Materia m) {
+		Valoracionmateria vm = ValoracionMateriaController.findCalification(p.getId(), m.getId(), this.student.getId());
 		
 		if (vm != null) {
 			updateStudent(vm);
 		}
-		else {
-			//Create insert metod
+		else if(!this.calification.getText().isBlank() || !this.calification.getText().isEmpty()){
+			insertStudentValoration(vm, p, m);			
 		}
 
+	}
+
+
+	/**
+	 * If the student doesn't have any valoration this metod will add it to the database.
+	 * @param vm
+	 */
+	private void insertStudentValoration(Valoracionmateria vm, Profesor p, Materia m) {
+		vm = new Valoracionmateria();
+		vm.setValoracion(Float.parseFloat(this.calification.getText()));
+		vm.setEstudiante(student);
+		vm.setProfesor(p);
+		vm.setMateria(m);
+		ValoracionMateriaController.realizeInsert(vm);
+		this.student.toString();
 	}
 
 
@@ -90,7 +109,7 @@ public class AlumnValorationPane extends JPanel {
 	 * @param vm
 	 */
 	private void updateStudent(Valoracionmateria vm) {
-		vm.setValoracion(Float.parseFloat(calification.getText()));
+		vm.setValoracion(Float.parseFloat(this.calification.getText()));
 		ValoracionMateriaController.realizeUpdate(vm);
 		this.student.toString();
 	}
